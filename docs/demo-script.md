@@ -6,6 +6,15 @@ jafarm covers the app and the tests; gaag2 then takes the CI gates.
 Total demo budget 6:30–7:30. jafarm's segment is the first ~3.5 minutes,
 ending on the failing PR so gaag2 can pick up the CI story.
 
+## Branch / PR layout on screen
+
+- **PR #2** — `regression/discount-bug` -> `main`. Shows the bug diff; its
+  checks are red. Left open, never merged.
+- **PR #3** — `fix/discount-bug` -> `regression/discount-bug`. Shows the
+  discount logic being restored; its checks go green. This is the "recovery"
+  the demo ends on. (Base is the regression branch, not `main`, so the diff and
+  the red -> green flip are actually visible.)
+
 ---
 
 ## 0. One-line setup (~15s)

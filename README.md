@@ -36,4 +36,4 @@ uvicorn app.main:app --reload
 
 ## Proposal
 
-Course proposal PR: <!-- TODO: replace with the real proposal PR URL --> https://github.com/sund02/devops-regression-ci-demo/pull/1
+Course proposal PR: https://github.com/KTH/devops-course/pull/2964

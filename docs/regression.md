@@ -44,13 +44,17 @@ A single-line cart is the one case where "percentage off the first line" and
 passing while the real behaviour is broken. That is the coverage-is-not-
 correctness point.
 
-## Branch flow
+## Branch / PR flow
 
-| Branch | State | `pytest` |
-| --- | --- | --- |
-| `main` | correct code | all pass, coverage >= 90% on `app/` |
-| `regression/discount-bug` | diff above applied | >= 2 fail (listed above) |
-| `fix/discount-bug` | diff reverted | all pass |
+| Branch | PR | State | `pytest` on the branch |
+| --- | --- | --- | --- |
+| `main` | — | correct code | all pass, coverage >= 90% on `app/` |
+| `regression/discount-bug` | PR #2 -> `main` | diff above applied | >= 2 fail (listed above); PR stays open, do not merge |
+| `fix/discount-bug` | PR #3 -> `regression/discount-bug` | diff reverted | all pass |
+
+PR #3 targets `regression/discount-bug`, not `main`, on purpose: that is the only
+base against which it shows a real "restore the discount" diff and its checks go
+red -> green. Against `main` the fix is a no-op diff and there is nothing to show.
 
 ## Apply / revert by hand
 
