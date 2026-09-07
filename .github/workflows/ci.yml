@@ -1,0 +1,41 @@
+name: CI
+
+# Runs on every pull request (against the PR's merge ref) and on direct
+# pushes to main. The `tests` job is the gate wired into branch protection;
+# the `mutation` job is informational and never blocks.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  tests:
+    name: tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install -r requirements.txt -r requirements-dev.txt
+      - name: pytest + coverage gate (>= 90% on app/)
+        run: pytest --cov=app --cov-report=term-missing --cov-fail-under=90
+
+  mutation:
+    name: mutation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install -r requirements.txt -r requirements-dev.txt
+      - name: Install mutmut (pinned)
+        run: pip install mutmut==2.4.4
+      - name: Mutation testing on the pricing logic
+        run: |
+          mutmut run --paths-to-mutate app/pricing.py --runner "python -m pytest -x -q tests/unit" || true
+          echo "----- surviving mutants (coverage ran the line; no test noticed the change) -----"
+          mutmut results
